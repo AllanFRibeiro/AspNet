@@ -1,0 +1,48 @@
+﻿@model IEnumerable<ClienteModel>
+
+@{
+    ViewData["Title"] = "Cliente";
+}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+
+
+            <h1>Clientes</h1>
+            <p class="toolbar">
+                <a class="create btn btn-dark" href="/Cliente/Novo">Novo Cliente</a>
+            </p>
+
+            @{ 
+                String msg = (String)TempData["MensagemSucesso"];
+                if (!String.IsNullOrEmpty(msg)) {
+                <div class="alert alert-warning" role="alert">
+                    <h4>@msg</h4>
+                </div>
+                }
+            }
+            
+
+            <table class="table table-striped" border="1" cellspacing="0" cellpadding="0">
+                <thead>
+                    <tr>
+                        <th data-field="id">Id</th>
+                        <th data-field="name">Nome</th>
+                        <th class="actions" width="220">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var cliente in Model)
+                    {
+                        <partial name="_ClienteItem" model="cliente" />
+                    }
+
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
