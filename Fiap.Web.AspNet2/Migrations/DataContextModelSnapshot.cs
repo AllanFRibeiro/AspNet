@@ -49,6 +49,94 @@ namespace Fiap.Web.AspNet2.Migrations
                     b.ToTable("Cliente");
                 });
 
+            modelBuilder.Entity("Fiap.Web.AspNet2.Models.LojaModel", b =>
+                {
+                    b.Property<int>("LojaId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("NomeLoja")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("LojaId");
+
+                    b.ToTable("Loja");
+                });
+
+            modelBuilder.Entity("Fiap.Web.AspNet2.Models.PaisModel", b =>
+                {
+                    b.Property<int>("PaisId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Continente")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NomePais")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(30)")
+                        .HasMaxLength(30);
+
+                    b.HasKey("PaisId");
+
+                    b.HasIndex("NomePais");
+
+                    b.ToTable("Pais");
+
+                    b.HasData(
+                        new
+                        {
+                            PaisId = 1,
+                            Continente = "America do Sul",
+                            NomePais = "Brasil"
+                        },
+                        new
+                        {
+                            PaisId = 2,
+                            Continente = "Europa",
+                            NomePais = "Alemanha"
+                        });
+                });
+
+            modelBuilder.Entity("Fiap.Web.AspNet2.Models.ProdutoLojaModel", b =>
+                {
+                    b.Property<int>("ProdutoLojaId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("LojaId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProdutoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ProdutoLojaId");
+
+                    b.HasIndex("LojaId");
+
+                    b.HasIndex("ProdutoId");
+
+                    b.ToTable("ProdutoLoja");
+                });
+
+            modelBuilder.Entity("Fiap.Web.AspNet2.Models.ProdutoModel", b =>
+                {
+                    b.Property<int>("ProdutoId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("NomeProduto")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ProdutoId");
+
+                    b.ToTable("Produto");
+                });
+
             modelBuilder.Entity("Fiap.Web.AspNet2.Models.RepresentanteModel", b =>
                 {
                     b.Property<int>("RepresentanteId")
@@ -71,8 +159,23 @@ namespace Fiap.Web.AspNet2.Migrations
             modelBuilder.Entity("Fiap.Web.AspNet2.Models.ClienteModel", b =>
                 {
                     b.HasOne("Fiap.Web.AspNet2.Models.RepresentanteModel", "Representante")
-                        .WithMany()
+                        .WithMany("Clientes")
                         .HasForeignKey("RepresentanteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Fiap.Web.AspNet2.Models.ProdutoLojaModel", b =>
+                {
+                    b.HasOne("Fiap.Web.AspNet2.Models.LojaModel", "Loja")
+                        .WithMany("ProdutoLojas")
+                        .HasForeignKey("LojaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Fiap.Web.AspNet2.Models.ProdutoModel", "Produto")
+                        .WithMany("ProdutoLojas")
+                        .HasForeignKey("ProdutoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
