@@ -1,30 +1,32 @@
 ﻿using Fiap.Web.AspNet2.Data;
 using Fiap.Web.AspNet2.Models;
 using Fiap.Web.AspNet2.Repository.Interface;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Fiap.Web.AspNet2.Repository
 {
-    public class RepresentanteRepository : IRepresentanteRepository
+    public class RepresentanteTextRepository : IRepresentanteRepository
     {
 
         public DataContext _context { get; set; }
 
-        public RepresentanteRepository([FromServices] DataContext context)
+        public RepresentanteTextRepository(DataContext context)
         {
             _context = context;
         }
 
 
-        public IList<RepresentanteModel> FindAll()
+        public List<RepresentanteModel> FindAll()
         {
             return _context.Representantes.ToList<RepresentanteModel>(); ;
         }
 
-        public RepresentanteModel FindById(int id) {
+        public RepresentanteModel FindById(int id)
+        {
             return _context.Representantes.Find(id);
         }
 
@@ -73,5 +75,11 @@ namespace Fiap.Web.AspNet2.Repository
             _context.SaveChanges();
         }
 
-      }
+        IList<RepresentanteModel> IRepresentanteRepository.FindAll()
+        {
+            throw new NotImplementedException();
+        }
+
+      
+    }
 }
